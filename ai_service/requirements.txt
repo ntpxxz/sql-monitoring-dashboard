@@ -1,0 +1,11 @@
+# ============================================================================
+# FILE: ai_service/requirements.txt
+# Lists the Python packages required for this service.
+# ============================================================================
+"""
+fastapi
+uvicorn[standard]
+google-generativeai
+python-dotenv
+requests
+"""
