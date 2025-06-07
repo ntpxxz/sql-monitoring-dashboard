@@ -2,10 +2,10 @@
 # FILE: ai_service/requirements.txt
 # Lists the Python packages required for this service.
 # ============================================================================
-"""
+
 fastapi
 uvicorn[standard]
 google-generativeai
 python-dotenv
 requests
-"""
+# Optional: Uncomment the following line if you want to use the OpenAI API

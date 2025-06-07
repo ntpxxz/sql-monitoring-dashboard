@@ -3,9 +3,9 @@
 // ============================================================================
 import { NextResponse } from 'next/server';
 import axios from 'axios';
-import { queryDatabase } from '@/lib/mssql';
-import sqlQueries from '@/lib/sql-queries';
-import { serverConfigs } from '../../../../lib/server-config';
+import { queryDatabase } from '@/app/lib/mssql';
+import sqlQueries from '@/app/lib/sql-queries';
+import { serverConfigs } from '@/app/lib/server-config';
 
 type ServerId = keyof typeof serverConfigs;
 

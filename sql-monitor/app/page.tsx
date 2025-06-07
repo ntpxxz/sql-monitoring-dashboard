@@ -1,6 +1,7 @@
 // ============================================================================
 // FILE: nextjs-app/app/page.tsx
 // ============================================================================
+"use client";
 import ClientLayout from "@/app/api/servers/[serverId]/components/ClientLayout";
 import { serverConfigs } from "@/app/lib/server-config";
 import { Server } from "@/app/types";

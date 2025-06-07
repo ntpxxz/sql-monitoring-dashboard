@@ -25,9 +25,13 @@ export const Dashboard: React.FC<DashboardProps> = ({ server }) => {
     }
   );
   
-  const memUsed = (data?.kpis.memory_total_mb ?? 0) - (data?.kpis.memory_available_mb ?? 0);
-  const memTotal = data?.kpis.memory_total_mb ?? 0;
-  const memUsagePercent = memTotal > 0 ? (memUsed / memTotal) * 100 : 0;
+  // FIX: Ensure all values from the API are treated as numbers before calculations or method calls.
+  const totalMb = Number(data?.kpis.memory_total_mb ?? 0);
+  const availableMb = Number(data?.kpis.memory_available_mb ?? 0);
+  const cpuPercent = Number(data?.kpis.cpu_sql_process_percent ?? 0);
+
+  const memUsed = totalMb - availableMb;
+  const memTotal = totalMb;  const memUsagePercent = memTotal > 0 ? (memUsed / memTotal) * 100 : 0;
   
   let statusColor = 'text-gray-500';
   if (error) statusColor = 'text-red-400';
@@ -45,7 +49,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ server }) => {
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 my-6">
-        <KPIWidget title="CPU (SQL Process)" value={`${data?.kpis.cpu_sql_process_percent?.toFixed(1) ?? '--'}%`} />
+
+        <KPIWidget title="CPU (SQL Process)" value={`${cpuPercent.toFixed(1)}%`} />
+
         <KPIWidget title="Memory Usage" value={`${memUsagePercent.toFixed(1)}%`} total={`${memUsed.toFixed(0)} / ${memTotal.toFixed(0)} MB`}/>
         <KPIWidget title="Active Connections" value={data?.kpis.active_connections?.toString() ?? '--'} />
         <KPIWidget title="CPU Cores" value={data?.kpis.cpu_count?.toString() ?? '--'} />
