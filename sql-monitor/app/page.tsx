@@ -12,11 +12,10 @@ export default function Home() {
     const servers: Server[] = Object.values(serverConfigs).map(s => ({
         id: s.id,
         name: s.name,
+        zone: s.zone,
     }));
 
     return (
         <ClientLayout servers={servers} />
     );
 }
-
-

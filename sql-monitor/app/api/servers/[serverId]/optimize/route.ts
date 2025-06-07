@@ -3,7 +3,7 @@
 // ============================================================================
 import { NextResponse } from 'next/server';
 import axios from 'axios';
-import { queryDatabase } from '@/app/lib/mssql';
+import { queryDatabase } from '@/app/lib/mssql'
 import sqlQueries from '@/app/lib/sql-queries';
 import { serverConfigs } from '@/app/lib/server-config';
 

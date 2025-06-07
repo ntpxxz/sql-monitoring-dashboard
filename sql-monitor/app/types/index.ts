@@ -4,6 +4,7 @@
 export interface Server {
   id: string;
   name: string;
+  zone: string;
 }
 
 export interface KpiData {
@@ -30,4 +31,20 @@ export interface ServerOverview {
 export interface OptimizationSuggestion {
     optimized_sql: string;
     explanation: string;
+}
+export interface SlowQueryResult {
+  DatabaseName: string;
+  AvgDuration_ms: number;
+  QueryText: string;
+  LastExecutionTime?: Date;
+  ExecutionCount?: number;
+}
+
+export interface FrequentQueryResult {
+  DatabaseName: string;
+  QueryText: string;
+  ExecutionCount: number;
+  LastExecutionTime: Date;
+  AvgDuration_ms: number;
+  TotalCPUTime_ms: number;
 }

@@ -20,6 +20,16 @@ interface SlowQueryResult {
   ExecutionCount?: number;
 }
 
+// Add new interface for frequently executed queries
+interface FrequentQueryResult {
+  DatabaseName: string;
+  QueryText: string;
+  ExecutionCount: number;
+  LastExecutionTime: Date;
+  AvgDuration_ms: number;
+  TotalCPUTime_ms: number;
+}
+
 const sqlQueries = {
   kpis: `
     WITH CPURingBuffer AS (
@@ -64,6 +74,29 @@ const sqlQueries = {
       AND DB_NAME(st.dbid) IS NOT NULL
       AND qs.last_execution_time > DATEADD(HOUR, -24, GETDATE())
     ORDER BY AvgDuration_ms DESC
+    OPTION (MAXDOP 1);
+  `,
+
+  frequentQueries: `
+    SELECT TOP 10
+        DB_NAME(st.dbid) as DatabaseName,
+        SUBSTRING(st.text, (qs.statement_start_offset/2) + 1,
+          ((CASE qs.statement_end_offset WHEN -1
+            THEN DATALENGTH(st.text)
+            ELSE qs.statement_end_offset END - qs.statement_start_offset)/2) + 1) AS QueryText,
+        qs.execution_count AS ExecutionCount,
+        qs.last_execution_time AS LastExecutionTime,
+        (qs.total_elapsed_time / qs.execution_count) / 1000.0 AS AvgDuration_ms,
+        (qs.total_worker_time / qs.execution_count) / 1000.0 AS TotalCPUTime_ms,
+        qs.total_logical_reads / qs.execution_count AS AvgLogicalReads,
+        CAST(qp.query_plan AS NVARCHAR(MAX)) AS QueryPlan
+    FROM sys.dm_exec_query_stats AS qs WITH (NOLOCK)
+    CROSS APPLY sys.dm_exec_sql_text(qs.sql_handle) AS st
+    OUTER APPLY sys.dm_exec_query_plan(qs.plan_handle) AS qp
+    WHERE st.dbid IS NOT NULL
+      AND DB_NAME(st.dbid) IS NOT NULL
+      AND qs.last_execution_time > DATEADD(DAY, -1, GETDATE())
+    ORDER BY qs.execution_count DESC
     OPTION (MAXDOP 1);
   `,
 

@@ -12,9 +12,6 @@ export async function queryDatabase(serverId: ServerId, queryString: string) {
     throw new Error(`Configuration for serverId "${serverId}" not found.`);
   }
 
-  // To connect to a specific database for a query, we can override the 'database' property.
-  // However, the queries from DMVs are instance-level, so connecting to 'master' or any db is fine.
-  // For queries specific to a DB (like getSchema), the USE statement handles it.
   const connectionConfig = { ...config };
 
   try {
