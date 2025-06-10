@@ -3,9 +3,15 @@
 // ============================================================================
 import { NextResponse } from 'next/server';
 import axios from 'axios';
+<<<<<<< HEAD
 import { queryDatabase } from '@/app/lib/mssql';
 import sqlQueries from '@/app/lib/sql-queries';
 import { serverConfigs } from '@/app/lib/configDb';
+=======
+import { queryDatabase } from '@/lib/mssql';
+import sqlQueries from '@/lib/sql-queries';
+import { serverConfigs } from '../../../../lib/server-config';
+>>>>>>> parent of 13c443f (Queri V1-Done)
 
 type ServerId = keyof typeof serverConfigs;
 

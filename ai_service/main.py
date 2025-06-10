@@ -3,18 +3,12 @@
 # The main FastAPI application for the AI Optimization Service.
 # ============================================================================
 import os
-import json
 import google.generativeai as genai
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
-from dotenv import load_dotenv
 
 # --- 1. INITIALIZATION & CONFIGURATION ---
-
-# Load environment variables from the .env file
-load_dotenv()
 
 # Initialize the FastAPI app
 app = FastAPI(
@@ -24,34 +18,31 @@ app = FastAPI(
 )
 
 # Configure CORS (Cross-Origin Resource Sharing)
+# Allows the Node.js backend (running on a different port) to call this service.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # Allow all origins for development
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Configure the Gemini API client using the environment variable
-api_key = os.getenv("GOOGLE_API_KEY")
-if not api_key:
-    print("!!! WARNING: GOOGLE_API_KEY environment variable not found.")
-    print("!!! The AI service will not work until the key is provided in an .env file.")
-else:
-    try:
-        genai.configure(api_key=api_key)
-        print(">>> Gemini API Key configured successfully.")
-    except Exception as e:
-        print(f"!!! ERROR: Failed to configure Gemini API: {e}")
-
+# Configure the Gemini API client
+# In a real production environment, load the API key from a secure source.
+# For example, using python-dotenv to load from a .env file.
+# from dotenv import load_dotenv
+# load_dotenv()
+# genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+# When running in some environments, the API key might be injected automatically.
 
 # --- 2. DATA MODELS (using Pydantic) ---
 
+# Defines the structure of the incoming request body
 class QueryRequest(BaseModel):
     query_text: str = Field(..., description="The T-SQL query to be optimized.")
     db_schema: str = Field("", description="Optional: The database schema for context. Formatted as a string.")
 
-# This model is now used for documentation purposes, not for response validation at the endpoint level.
+# Defines the structure of the successful response
 class OptimizationSuggestion(BaseModel):
     optimized_sql: str
     explanation: str
@@ -100,46 +91,43 @@ def create_optimization_prompt(query: str, schema: str) -> str:
 
 # --- 4. API ENDPOINT ---
 
-@app.post("/optimize-query")
+@app.post("/optimize-query", response_model=OptimizationSuggestion)
 async def optimize_query(request: QueryRequest):
     """
     Receives a SQL query, sends it to the Gemini API for analysis,
     and returns the optimization suggestions.
     """
     print("Received query for optimization...")
-
-    # Check if the API key was configured on startup.
-    if not api_key:
-        raise HTTPException(
-            status_code=500,
-            detail="Gemini API key is not configured on the server. Please check the .env file and restart the service."
-        )
     
-    json_string = ""
-    try:
-        model = genai.GenerativeModel('gemini-2.0-flash')
-        prompt = create_optimization_prompt(request.query_text, request.db_schema)
+    # It's good practice to ensure the Gemini API is configured before proceeding.
+    # if not os.getenv("GEMINI_API_KEY"):
+    #     raise HTTPException(status_code=500, detail="Gemini API key is not configured on the server.")
 
-        response = await model.generate_content_async(
-            prompt,
-            generation_config={"response_mime_type": "application/json"}
+    try:
+        # Initialize the generative model
+        model = genai.GenerativeModel('gemini-2.0-flash') # Use a fast and capable model
+        
+        # Create the detailed prompt
+        prompt = create_optimization_prompt(request.query_text, request.db_schema)
+        
+        # Set generation config to ensure JSON output
+        generation_config = genai.types.GenerationConfig(
+            response_mime_type="application/json"
         )
 
-        json_string = response.candidates[0].content.parts[0].text
+        # Send the request to the Gemini API
+        response = await model.generate_content_async(
+            prompt, 
+            generation_config=generation_config
+        )
         
-        # Clean up potential markdown formatting from the LLM response
-        if json_string.strip().startswith("```json"):
-            json_string = json_string.strip()[7:-3].strip()
+        # The model is configured to return a JSON object directly
+        # The response.text will be a JSON string, which FastAPI automatically handles
+        # when converting to the `response_model`.
+        return response.candidates[0].content.parts[0].text
 
-        # Manually parse the string and return a proper JSONResponse
-        parsed_data = json.loads(json_string)
-        return JSONResponse(content=parsed_data)
-
-    except json.JSONDecodeError:
-        print(f"Error: Failed to decode JSON from Gemini API response. Response was: {json_string}")
-        raise HTTPException(status_code=500, detail="The AI service returned an invalid format.")
     except Exception as e:
-        print(f"An error occurred during Gemini API call: {e}")
+        print(f"An error occurred: {e}")
         raise HTTPException(status_code=500, detail=f"An error occurred while communicating with the AI service: {str(e)}")
 
 # --- 5. ROOT ENDPOINT (for health check) ---
@@ -147,4 +135,3 @@ async def optimize_query(request: QueryRequest):
 @app.get("/")
 def read_root():
     return {"status": "AI Optimization Service is running."}
-

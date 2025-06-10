@@ -1,6 +1,10 @@
 "use server";
 import sql from 'mssql';
+<<<<<<< HEAD
 import { getServerConfigById } from './configDb';
+=======
+import { serverConfigs } from './server-config';
+>>>>>>> parent of 13c443f (Queri V1-Done)
 
 export async function queryDatabase(serverId: string, queryString: string) {
   const config = await getServerConfigById(serverId);
@@ -8,6 +12,7 @@ export async function queryDatabase(serverId: string, queryString: string) {
     throw new Error(`Configuration for serverId "${serverId}" not found in the database.`);
   }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -19,6 +24,8 @@ export async function queryDatabase(serverId: string, queryString: string) {
   const connectionConfig = { ...config };
 
 >>>>>>> parent of 91e4265 (Queri V1-Done)
+=======
+>>>>>>> parent of 13c443f (Queri V1-Done)
   try {
     const pool = await sql.connect(config);
     const result = await pool.request().query(queryString);

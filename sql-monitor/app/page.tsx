@@ -1,8 +1,15 @@
 // ============================================================================
 // FILE: nextjs-app/app/page.tsx
 // ============================================================================
+<<<<<<< HEAD
 import ClientLayout from "@/app/components/ClientLayout";
 import { Server } from "@/types";
+=======
+import ClientLayout from "@/app/api/servers/[serverId]/components/ClientLayout";
+import { serverConfigs } from "@/app/lib/server-config";
+import { Server } from "@/app/types";
+
+>>>>>>> parent of 13c443f (Queri V1-Done)
 // This is a Server Component, it runs on the server.
 <<<<<<< HEAD
 import { getMonitoredServers } from "@/app/lib/configDb";
