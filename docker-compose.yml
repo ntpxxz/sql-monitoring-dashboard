@@ -6,7 +6,7 @@ version: '3.8'
 services:
   # 1. PostgreSQL Database for storing server configurations
   postgres:
-    image: postgres:15-alpine
+    image: postgres:15-alpine 
     container_name: sql_monitor_config_db
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
@@ -40,7 +40,7 @@ services:
   nextjs-app:
     container_name: sql_monitor_next_app
     build:
-      context: ./nextjs-app
+      context: ./sql-monitor
       dockerfile: Dockerfile
     restart: unless-stopped
     ports:

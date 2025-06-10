@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server';
 import axios from 'axios';
 import { queryDatabase } from '@/app/lib/mssql'
 import sqlQueries from '@/app/lib/sql-queries';
-import { serverConfigs } from '@/app/lib/server-config';
+import { serverConfigs } from '@/app/lib/configDb';
 
 type ServerId = keyof typeof serverConfigs;
 
@@ -42,3 +42,20 @@ export async function POST(
         return new NextResponse('Failed to get AI optimization.', { status: 500 });
     }
 }
+
+// Server configuration interfaces and example
+interface ServerConfig {
+    server: string;
+    database: string;
+    authentication: {
+        type: string;
+        options: {
+            userName: string;
+            password: string;
+        };
+    };
+}
+
+export const serverConfigs: Record<string, ServerConfig> = {
+    // your server configurations here
+};

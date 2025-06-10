@@ -2,7 +2,7 @@
 // FILE: nextjs-app/app/api/servers/route.ts (MODIFIED)
 // ============================================================================
 import { NextResponse } from 'next/server';
-import { getMonitoredServers } from '@/lib/configDb';
+import { getMonitoredServers } from '@/app/lib/configDb';
 
 export const dynamic = 'force-dynamic';
 

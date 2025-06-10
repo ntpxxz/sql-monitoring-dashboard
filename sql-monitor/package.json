@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@prisma/client": "^6.9.0",
     "@types/pg": "^8.15.4",
     "axios": "^1.9.0",
     "lucide-react": "^0.513.0",
