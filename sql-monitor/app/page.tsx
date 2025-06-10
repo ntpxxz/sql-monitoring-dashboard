@@ -4,8 +4,17 @@
 import ClientLayout from "@/app/components/ClientLayout";
 import { Server } from "@/types";
 // This is a Server Component, it runs on the server.
+<<<<<<< HEAD
 import { getMonitoredServers } from "@/app/lib/configDb";
 import { getDbPool } from '@/app/lib/configDb';
+=======
+export default function Home() {
+    // We can prepare server-side data here.
+    const servers: Server[] = Object.values(serverConfigs).map(s => ({
+        id: s.id,
+        name: s.name,
+    }));
+>>>>>>> parent of 91e4265 (Queri V1-Done)
 
 export default async function Home() {
   try {
@@ -23,5 +32,11 @@ export default async function Home() {
         <p>Please check your database configuration</p>
       </div>
     );
+<<<<<<< HEAD
   }
 }
+=======
+}
+
+
+>>>>>>> parent of 91e4265 (Queri V1-Done)

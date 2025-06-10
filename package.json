@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "lucide-react": "^0.513.0",
+    "swr": "^2.3.3"
+  }
+}
