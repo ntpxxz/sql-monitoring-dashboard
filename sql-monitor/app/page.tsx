@@ -35,8 +35,13 @@ export default async function Home() {
 <<<<<<< HEAD
   }
 }
+<<<<<<< HEAD
 =======
 }
+
+
+>>>>>>> parent of 91e4265 (Queri V1-Done)
+=======
 
 
 >>>>>>> parent of 91e4265 (Queri V1-Done)

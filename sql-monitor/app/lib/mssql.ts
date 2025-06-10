@@ -9,7 +9,10 @@ export async function queryDatabase(serverId: string, queryString: string) {
   }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> parent of 91e4265 (Queri V1-Done)
   // To connect to a specific database for a query, we can override the 'database' property.
   // However, the queries from DMVs are instance-level, so connecting to 'master' or any db is fine.
   // For queries specific to a DB (like getSchema), the USE statement handles it.
