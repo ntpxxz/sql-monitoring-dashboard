@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { FrequentQuery } from '@/app/types';
+import { FrequentQuery } from '@/types';
 
 interface MostFrequentQueryTableProps {
   queries: FrequentQuery[] | undefined;

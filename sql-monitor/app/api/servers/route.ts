@@ -1,14 +1,12 @@
 // ============================================================================
-// FILE: nextjs-app/app/api/servers/route.ts
+// FILE: nextjs-app/app/api/servers/route.ts (MODIFIED)
 // ============================================================================
 import { NextResponse } from 'next/server';
-import { serverConfigs } from '@/app/lib/server-config';
+import { getMonitoredServers } from '@/lib/configDb';
+
 export const dynamic = 'force-dynamic';
+
 export async function GET() {
-  const serverList = Object.values(serverConfigs).map(s => ({
-    id: s.id,
-    name: s.name,
-  }));
+  const serverList = await getMonitoredServers();
   return NextResponse.json(serverList);
 }
-

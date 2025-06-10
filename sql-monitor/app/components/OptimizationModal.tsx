@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
-import { SlowQuery, OptimizationSuggestion } from '@/app/types';
+import { SlowQuery, OptimizationSuggestion } from '@/types';
 
 async function getAIOptimization(serverId: string, query_text: string, database_name: string): Promise<OptimizationSuggestion> {
     const response = await fetch(`/api/servers/${serverId}/optimize`, {

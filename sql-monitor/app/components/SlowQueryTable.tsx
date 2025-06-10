@@ -5,7 +5,7 @@
 
 import React, { useState } from 'react';
 import { BrainCircuit } from 'lucide-react';
-import { SlowQuery } from '@/app/types';
+import { SlowQuery } from '@/types';
 import { OptimizationModal } from './OptimizationModal';
 
 interface SlowQueryTableProps {

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Sidebar } from './Sidebar';
 import { Dashboard } from './Dashboard';
 import { AddServerModal } from './AddServerModal';
-import { Server } from '@/app/types';
+import { Server } from '@/types';
 
 interface ClientLayoutProps {
   servers: Server[];

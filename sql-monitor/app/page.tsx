@@ -1,21 +1,15 @@
 // ============================================================================
 // FILE: nextjs-app/app/page.tsx
 // ============================================================================
-"use client";
-import ClientLayout from "@/app/api/servers/[serverId]/components/ClientLayout";
-import { serverConfigs } from "@/app/lib/server-config";
-import { Server } from "@/app/types";
-
+import ClientLayout from "@/app/components/ClientLayout";
+import { Server } from "@/types";
 // This is a Server Component, it runs on the server.
-export default function Home() {
-    // We can prepare server-side data here.
-    const servers: Server[] = Object.values(serverConfigs).map(s => ({
-        id: s.id,
-        name: s.name,
-        zone: s.zone,
-    }));
+import { getMonitoredServers } from "@/lib/configDb";
 
-    return (
-        <ClientLayout servers={servers} />
-    );
+export default async function Home() {
+  // Fetch the list of monitored servers from the database
+  const Server: Server[] = await getMonitoredServers();
+
+  // Render the ClientLayout component with the serverList prop
+  return <ClientLayout servers={Server} />;
 }

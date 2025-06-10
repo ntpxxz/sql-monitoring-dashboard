@@ -5,7 +5,7 @@
 
 import React from 'react';
 import useSWR from 'swr';
-import { Server, ServerOverview } from '@/app/types';
+import { Server, ServerOverview } from '@/types';
 import { KPIWidget } from './KPIWidget';
 import { SlowQueryTable } from './SlowQueryTable';
 import { MostFrequentQueryTable } from './MostFrequentQueryTable';

@@ -1,0 +1,62 @@
+# This file orchestrates all the services for our application.
+# Run `docker-compose up --build` from your project's root directory.
+
+version: '3.8'
+
+services:
+  # 1. PostgreSQL Database for storing server configurations
+  postgres:
+    image: postgres:15-alpine
+    container_name: sql_monitor_config_db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # 2. Python AI Service
+  ai_service:
+    container_name: sql_monitor_ai_service
+    build:
+      context: ./ai_service
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      # Pass the API key from your host .env file to the container
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY} 
+
+  # 3. Next.js Full-Stack Application
+  nextjs-app:
+    container_name: sql_monitor_next_app
+    build:
+      context: ./nextjs-app
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      # Connection string for the PostgreSQL config database
+      # It connects to the 'postgres' service defined above
+      CONFIG_DATABASE_URL: postgres://admin:your_secure_password@postgres:5432/server_configs
+      # URL for the AI service
+      AI_SERVICE_URL: http://ai_service:8000/optimize-query
+    depends_on:
+      postgres:
+        condition: service_healthy # Wait for postgres to be ready before starting
+      ai_service:
+        condition: service_started
+
+# This volume will persist our PostgreSQL data even if the container is removed
+volumes:
+  postgres_data:
