@@ -4,6 +4,9 @@
 import { NextResponse } from 'next/server';
 import axios from 'axios';
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> parent of 91e4265 (Queri V1-Done)
 import { queryDatabase } from '@/app/lib/mssql';
 import sqlQueries from '@/app/lib/sql-queries';
 import { serverConfigs } from '@/app/lib/configDb';

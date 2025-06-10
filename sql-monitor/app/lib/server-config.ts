@@ -163,6 +163,7 @@ export const serverConfigs = {
   },
 };
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> parent of 91e4265 (Queri V1-Done)
 =======
 >>>>>>> parent of 91e4265 (Queri V1-Done)
@@ -200,3 +201,5 @@ export const serverConfigs = {
   };
   
 >>>>>>> parent of 13c443f (Queri V1-Done)
+=======
+>>>>>>> parent of 91e4265 (Queri V1-Done)

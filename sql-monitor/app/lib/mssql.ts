@@ -15,7 +15,10 @@ export async function queryDatabase(serverId: string, queryString: string) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> parent of 91e4265 (Queri V1-Done)
 =======
 >>>>>>> parent of 91e4265 (Queri V1-Done)
   // To connect to a specific database for a query, we can override the 'database' property.
